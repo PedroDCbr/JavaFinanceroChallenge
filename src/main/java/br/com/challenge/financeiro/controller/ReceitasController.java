@@ -44,11 +44,11 @@ public class ReceitasController {
 	
 	@PostMapping
 	public ResponseEntity<FormReceitasDto> cadastra(@RequestBody @Valid ReceitasForm form, UriComponentsBuilder uriBilder) {
-		Receitas receita = form.converter();
-		repository.save(receita);
+		Receitas receitas = form.converter();
+		repository.save(receitas);
 		
-		URI uri = uriBilder.path("/receitas/{id}").buildAndExpand(receita.getId()).toUri();
-		return ResponseEntity.created(uri).body(new FormReceitasDto(receita));
+		URI uri = uriBilder.path("/receitas/{id}").buildAndExpand(receitas.getId()).toUri();
+		return ResponseEntity.created(uri).body(new FormReceitasDto(receitas));
 		
 	}
 	

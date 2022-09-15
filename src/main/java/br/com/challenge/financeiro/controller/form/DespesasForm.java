@@ -2,21 +2,24 @@ package br.com.challenge.financeiro.controller.form;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import javax.validation.constraints.NotEmpty;
+
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 import br.com.challenge.financeiro.model.Despesas;
 
 public class DespesasForm {
 	
-	@NotNull @NotEmpty @Size(min = 5, max = 50)
+	@NotBlank @Size(min = 5, max = 50)
 	private String descricao;
 	
-	@NotNull @NotEmpty
+	@NotNull @PositiveOrZero
 	private BigDecimal valor;
 	
-	@NotNull @NotEmpty
-	private LocalDate data = LocalDate.now();
+	@NotNull @PastOrPresent
+	private LocalDate data;
 	
 
 	public String getDescricao() {
@@ -29,7 +32,13 @@ public class DespesasForm {
 		return valor;
 	}
 	public void setValor(BigDecimal valor) {
-		this.valor = valor;
+		this.valor = valor; 
+	}	
+	public LocalDate getData() {
+		return data;
+	}
+	public void setData(LocalDate data) {
+		this.data = data;
 	}
 	
 	

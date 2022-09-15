@@ -16,7 +16,7 @@ public class ReceitasDto {
 	
 	public ReceitasDto(Receitas receitas) {
 		this.id = receitas.getId();
-		this.descricao = receitas.getDescicao();
+		this.descricao = receitas.getDescricao();
 		this.valor = receitas.getValor();
 		this.data = receitas.getData();		
 	}

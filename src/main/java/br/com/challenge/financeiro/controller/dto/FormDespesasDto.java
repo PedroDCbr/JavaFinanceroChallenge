@@ -28,7 +28,7 @@ public class FormDespesasDto {
 	public Long getId() {
 		return id;
 	}
-	public String getDescicao() {
+	public String getDescricao() {
 		return descricao;
 	}
 	public BigDecimal getValor() {

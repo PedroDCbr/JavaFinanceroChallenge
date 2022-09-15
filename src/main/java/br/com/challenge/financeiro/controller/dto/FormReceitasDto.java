@@ -8,7 +8,7 @@ import br.com.challenge.financeiro.model.Receitas;
 public class FormReceitasDto {
 	
 	private Long id;
-	private String descicao;
+	private String descricao;
 	private BigDecimal valor;
 	private LocalDate data;
 	
@@ -17,7 +17,7 @@ public class FormReceitasDto {
 	
 	public FormReceitasDto(Receitas receitas) {
 		this.id = receitas.getId();
-		this.descicao = receitas.getDescicao();
+		this.descricao = receitas.getDescricao();
 		this.valor = receitas.getValor();
 		this.data = receitas.getData();
 	}
@@ -28,8 +28,8 @@ public class FormReceitasDto {
 	public Long getId() {
 		return id;
 	}
-	public String getDescicao() {
-		return descicao;
+	public String getDescricao() {
+		return descricao;
 	}
 	public BigDecimal getValor() {
 		return valor;
