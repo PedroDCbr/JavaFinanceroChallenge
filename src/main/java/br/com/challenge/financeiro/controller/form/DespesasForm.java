@@ -2,13 +2,13 @@ package br.com.challenge.financeiro.controller.form;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 import br.com.challenge.financeiro.model.Despesas;
+import br.com.challenge.financeiro.repository.DespesasRepository;
 
 public class DespesasForm {
 	
@@ -44,6 +44,14 @@ public class DespesasForm {
 	
 	public Despesas converter() {
 		return new Despesas(descricao, valor, data);
+	}
+	public Despesas atuliza(Long id, DespesasRepository repository) {
+		Despesas despesas = repository.getReferenceById(id);
+		despesas.setDescricao(this.descricao);
+		despesas.setValor(this.valor);
+		despesas.setData(this.data);
+		
+		return despesas;
 	}
 	
 	
