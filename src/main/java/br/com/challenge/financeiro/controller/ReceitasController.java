@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 import br.com.challenge.financeiro.controller.dto.FormReceitasDto;
@@ -31,9 +32,15 @@ public class ReceitasController {
 	private ReceitasRepository repository;
 	
 	@GetMapping
-	public List<ReceitasDto> lista(){
-		List<Receitas> receitas = repository.findAll();
-		return ReceitasDto.converter(receitas);
+	public List<ReceitasDto> lista(@RequestParam(required = false) String descricao){
+		if(descricao == null) {
+			List<Receitas> receitas = repository.findAll();
+			return ReceitasDto.converter(receitas);
+		}else {
+			List<Receitas> receitas = repository.findByDescricao(descricao);
+			return ReceitasDto.converter(receitas);
+		}
+		
 	}
 	
 	@GetMapping("/{id}")

@@ -3,6 +3,8 @@ package br.com.challenge.financeiro.model;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,7 +16,9 @@ public class Despesas {
 	private Long id;
 	private String descricao;
 	private BigDecimal valor;
-	private LocalDate data; 
+	private LocalDate data;
+	@Enumerated(EnumType.STRING)
+	private CategoriaDespesas categoria = CategoriaDespesas.OUTRAS;
 	
 	
 	
@@ -22,10 +26,11 @@ public class Despesas {
 		
 	}
 	
-	public Despesas(String descricao, BigDecimal valor, LocalDate data) {
+	public Despesas(String descricao, BigDecimal valor, LocalDate data, CategoriaDespesas categoria) {
 		this.descricao = descricao;
 		this.valor = valor;
 		this.data = data;
+		this.categoria = categoria;
 	}
 
 
@@ -55,7 +60,13 @@ public class Despesas {
 		return true;
 	}
 
-
+	
+	public CategoriaDespesas getCategoria() {
+		return categoria;
+	}
+	public void setCategoria(CategoriaDespesas categoria) {
+		this.categoria = categoria;
+	}
 	public Long getId() {
 		return id;
 	}

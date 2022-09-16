@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 import br.com.challenge.financeiro.controller.dto.DespesasDto;
@@ -30,9 +31,15 @@ public class DespesasController {
 	private DespesasRepository repository;
 	
 	@GetMapping
-	public List<DespesasDto> lista(){
-		List<Despesas> despesas = repository.findAll();
-		return DespesasDto.converter(despesas);
+	public List<DespesasDto> lista(@RequestParam(required = false) String descricao){
+		if(descricao == null) {
+			List<Despesas> despesas = repository.findAll();
+			return DespesasDto.converter(despesas);
+		}else {
+			List<Despesas> despesas = repository.findByDescricao(descricao);
+			return DespesasDto.converter(despesas);
+		}
+		
 	}
 	
 	@GetMapping("/{id}")
@@ -42,7 +49,12 @@ public class DespesasController {
 			return ResponseEntity.ok(new DespesasDto(despesas.get()));
 		}
 		return ResponseEntity.badRequest().build();
-	}	
+	}
+	
+	/*@GetMapping("/{ano}/{mes}")
+	public ResoinseEntity<DespesasDto> buscarPorMes(@PathVariable int ano, @PathVariable int mes){
+		Opitional<Despesas> despesasAno = repository.findByData()
+	}*/
 	
 	@PostMapping
 	public ResponseEntity<FormDespesasDto> cadastra(@RequestBody @Valid DespesasForm form, UriComponentsBuilder uriBilder) {

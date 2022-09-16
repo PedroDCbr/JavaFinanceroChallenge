@@ -22,7 +22,7 @@ public class ReceitasForm {
 	@NotNull @PastOrPresent
 	private LocalDate data;
 	
-
+	
 	public String getDescricao() {
 		return descricao;
 	}

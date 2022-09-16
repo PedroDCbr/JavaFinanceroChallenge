@@ -3,6 +3,7 @@ package br.com.challenge.financeiro.controller.dto;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import br.com.challenge.financeiro.model.CategoriaDespesas;
 import br.com.challenge.financeiro.model.Despesas;
 
 public class FormDespesasDto {
@@ -11,6 +12,7 @@ public class FormDespesasDto {
 	private String descricao;
 	private BigDecimal valor;
 	private LocalDate data;
+	private CategoriaDespesas categoria;
 	
 	
 	
@@ -20,11 +22,12 @@ public class FormDespesasDto {
 		this.descricao = despesas.getDescricao();
 		this.valor = despesas.getValor();
 		this.data = despesas.getData();
+		this.categoria = despesas.getCategoria();
 	}
 
 
 
-
+	
 	public Long getId() {
 		return id;
 	}
@@ -37,4 +40,8 @@ public class FormDespesasDto {
 	public LocalDate getData() {
 		return data;
 	}
+	public CategoriaDespesas getCategoria() {
+		return categoria;
+	}
+	
 }
