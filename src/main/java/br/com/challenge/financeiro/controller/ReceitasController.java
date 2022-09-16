@@ -1,9 +1,10 @@
 package br.com.challenge.financeiro.controller;
 
 import java.net.URI;
+import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.Optional;
-
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -50,7 +51,19 @@ public class ReceitasController {
 			return ResponseEntity.ok(new ReceitasDto(receitas.get()));
 		}
 		return ResponseEntity.badRequest().build();
-	}	
+	}
+	
+	@GetMapping("/{ano}/{mes}")
+	public ResponseEntity<List<ReceitasDto>> buscarPorAnoMes(@PathVariable Integer ano, @PathVariable Integer mes) {
+		LocalDate dataInicio = LocalDate.of(ano, mes, 1);
+		if(dataInicio == null) {
+			return ResponseEntity.badRequest().build();
+		}
+		LocalDate dataFinal = dataInicio.with(TemporalAdjusters.lastDayOfMonth());
+		List<Receitas> receitas = repository.findByDataBetween(dataInicio, dataFinal);
+		return ResponseEntity.ok(ReceitasDto.converter(receitas));
+
+	}
 	
 	@PostMapping
 	public ResponseEntity<FormReceitasDto> cadastra(@RequestBody @Valid ReceitasForm form, UriComponentsBuilder uriBilder) {

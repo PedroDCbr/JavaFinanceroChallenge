@@ -1,6 +1,8 @@
 package br.com.challenge.financeiro.controller;
 
 import java.net.URI;
+import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
@@ -26,67 +28,74 @@ import br.com.challenge.financeiro.repository.DespesasRepository;
 @RestController
 @RequestMapping("/despesas")
 public class DespesasController {
-	
+
 	@Autowired
 	private DespesasRepository repository;
-	
+
 	@GetMapping
-	public List<DespesasDto> lista(@RequestParam(required = false) String descricao){
-		if(descricao == null) {
+	public List<DespesasDto> lista(@RequestParam(required = false) String descricao) {
+		if (descricao == null) {
 			List<Despesas> despesas = repository.findAll();
 			return DespesasDto.converter(despesas);
-		}else {
+		} else {
 			List<Despesas> despesas = repository.findByDescricao(descricao);
 			return DespesasDto.converter(despesas);
 		}
-		
+
 	}
-	
+
 	@GetMapping("/{id}")
-	public ResponseEntity<DespesasDto> detalhar(@PathVariable Long id){
+	public ResponseEntity<DespesasDto> detalhar(@PathVariable Long id) {
 		Optional<Despesas> despesas = repository.findById(id);
-		if(despesas.isPresent()) {
+		if (despesas.isPresent()) {
 			return ResponseEntity.ok(new DespesasDto(despesas.get()));
 		}
 		return ResponseEntity.badRequest().build();
 	}
-	
-	/*@GetMapping("/{ano}/{mes}")
-	public ResoinseEntity<DespesasDto> buscarPorMes(@PathVariable int ano, @PathVariable int mes){
-		Opitional<Despesas> despesasAno = repository.findByData()
-	}*/
-	
+
+	@GetMapping("/{ano}/{mes}")
+	public ResponseEntity<?> buscarPorAnoMes(@PathVariable Integer ano, @PathVariable Integer mes) {
+		LocalDate dataInicio = LocalDate.of(ano, mes, 1);		
+		if(dataInicio == null) {
+			return ResponseEntity.badRequest().build();
+		}
+		LocalDate dataFinal = dataInicio.with(TemporalAdjusters.lastDayOfMonth());
+		List<Despesas> despesas = repository.findByDataBetween(dataInicio, dataFinal);
+		return ResponseEntity.ok(DespesasDto.converter(despesas));
+
+	}
+
 	@PostMapping
-	public ResponseEntity<FormDespesasDto> cadastra(@RequestBody @Valid DespesasForm form, UriComponentsBuilder uriBilder) {
+	public ResponseEntity<FormDespesasDto> cadastra(@RequestBody @Valid DespesasForm form,
+			UriComponentsBuilder uriBilder) {
 		Despesas despesas = form.converter();
 		repository.save(despesas);
-		
+
 		URI uri = uriBilder.path("/despesas/{id}").buildAndExpand(despesas.getId()).toUri();
 		return ResponseEntity.created(uri).body(new FormDespesasDto(despesas));
-		
+
 	}
-	
+
 	@PutMapping("{id}")
 	@Transactional
-	public ResponseEntity<FormDespesasDto> atualizar(@RequestBody @Valid DespesasForm form, @PathVariable Long id){
+	public ResponseEntity<FormDespesasDto> atualizar(@RequestBody @Valid DespesasForm form, @PathVariable Long id) {
 		Optional<Despesas> optional = repository.findById(id);
-		if(optional.isPresent()) {
+		if (optional.isPresent()) {
 			Despesas despesas = form.atuliza(id, repository);
 			return ResponseEntity.ok(new FormDespesasDto(despesas));
 		}
 		return ResponseEntity.badRequest().build();
 	}
-	
+
 	@DeleteMapping("{id}")
 	@Transactional
-	public ResponseEntity<?> escluir(@PathVariable Long id){
+	public ResponseEntity<?> escluir(@PathVariable Long id) {
 		Optional<Despesas> optional = repository.findById(id);
-		if(optional.isPresent()) {
+		if (optional.isPresent()) {
 			repository.deleteById(id);
 			return ResponseEntity.ok().build();
 		}
 		return ResponseEntity.badRequest().build();
 	}
-	
 
 }
