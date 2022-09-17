@@ -1,6 +1,7 @@
 package br.com.challenge.financeiro.controller;
 
 import java.net.URI;
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
@@ -55,10 +56,12 @@ public class DespesasController {
 
 	@GetMapping("/{ano}/{mes}")
 	public ResponseEntity<?> buscarPorAnoMes(@PathVariable Integer ano, @PathVariable Integer mes) {
-		LocalDate dataInicio = LocalDate.of(ano, mes, 1);		
-		if(dataInicio == null) {
+		LocalDate dataInicio;
+		try {
+			dataInicio = LocalDate.of(ano, mes, 1);
+		} catch (DateTimeException e) {
 			return ResponseEntity.badRequest().build();
-		}
+		}		
 		LocalDate dataFinal = dataInicio.with(TemporalAdjusters.lastDayOfMonth());
 		List<Despesas> despesas = repository.findByDataBetween(dataInicio, dataFinal);
 		return ResponseEntity.ok(DespesasDto.converter(despesas));
