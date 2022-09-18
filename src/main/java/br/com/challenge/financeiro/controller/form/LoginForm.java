@@ -1,21 +1,16 @@
 package br.com.challenge.financeiro.controller.form;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 public class LoginForm {
 	
-	@NotBlank @Email
+	@NotEmpty
 	private String email;
-	@NotBlank
+	@NotEmpty
 	private String senha;
-	
-	
-	
-	
-	
+		
 	
 	
 	public void setEmail(String email) {
@@ -31,7 +26,6 @@ public class LoginForm {
 		return senha;
 	}
 	public UsernamePasswordAuthenticationToken converter() {
-		// TODO Auto-generated method stub
 		return new UsernamePasswordAuthenticationToken(email, senha);
 	}
 	

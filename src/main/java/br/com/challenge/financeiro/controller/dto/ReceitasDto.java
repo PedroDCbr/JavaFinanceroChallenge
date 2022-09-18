@@ -41,7 +41,7 @@ public class ReceitasDto {
 	public static Page<ReceitasDto> converter(Page<Receitas> receitas) {
 		return receitas.map(ReceitasDto::new);
 	}
-	
+
 	
 
 }

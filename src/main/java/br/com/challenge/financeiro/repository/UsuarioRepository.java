@@ -8,6 +8,6 @@ import br.com.challenge.financeiro.model.Usuario;
 
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
-	Optional<Usuario> findByEmail(String username);
+	Optional<Usuario> findByEmail(String email);
 
 }

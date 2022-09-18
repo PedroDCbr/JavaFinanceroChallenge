@@ -22,6 +22,7 @@ public class Usuario implements UserDetails {
 	
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	private String nome;
 	private String email;
 	private  String senha;
 	
@@ -31,7 +32,8 @@ public class Usuario implements UserDetails {
 	public Usuario() {		
 	}
 	
-	public Usuario(String email, String senha) {
+	public Usuario(String nome, String email, String senha) {
+		this.nome = nome;
 		this.email = email;
 		this.senha = senha;		
 	}
@@ -77,6 +79,12 @@ public class Usuario implements UserDetails {
 	}
 	public void setSenha(String senha) {
 		this.senha = senha;
+	}
+	public String getNome() {
+		return nome;
+	}
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
