@@ -4,10 +4,11 @@ import java.net.URI;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
-import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,12 +35,12 @@ public class ReceitasController {
 	private ReceitasRepository repository;
 	
 	@GetMapping
-	public List<ReceitasDto> lista(@RequestParam(required = false) String descricao){
+	public Page<ReceitasDto> lista(@RequestParam(required = false) String descricao, Pageable pageable){
 		if(descricao == null) {
-			List<Receitas> receitas = repository.findAll();
+			Page<Receitas> receitas = repository.findAll(pageable);
 			return ReceitasDto.converter(receitas);
 		}else {
-			List<Receitas> receitas = repository.findByDescricao(descricao);
+			Page<Receitas> receitas = repository.findByDescricao(descricao, pageable);
 			return ReceitasDto.converter(receitas);
 		}
 		
@@ -55,7 +56,8 @@ public class ReceitasController {
 	}
 	
 	@GetMapping("/{ano}/{mes}")
-	public ResponseEntity<List<ReceitasDto>> buscarPorAnoMes(@PathVariable Integer ano, @PathVariable Integer mes) {
+	public ResponseEntity<Page<ReceitasDto>> buscarPorAnoMes(@PathVariable Integer ano, @PathVariable Integer mes,
+			Pageable pageable) {
 		LocalDate dataInicio;
 		try {
 			dataInicio = LocalDate.of(ano, mes, 1);
@@ -64,7 +66,7 @@ public class ReceitasController {
 		}
 		
 		LocalDate dataFinal = dataInicio.with(TemporalAdjusters.lastDayOfMonth());
-		List<Receitas> receitas = repository.findByDataBetween(dataInicio, dataFinal);
+		Page<Receitas> receitas = repository.findByDataBetween(dataInicio, dataFinal, pageable);
 		return ResponseEntity.ok(ReceitasDto.converter(receitas));
 
 	}

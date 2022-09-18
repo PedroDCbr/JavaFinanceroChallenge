@@ -4,10 +4,11 @@ import java.net.URI;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
-import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,12 +35,12 @@ public class DespesasController {
 	private DespesasRepository repository;
 
 	@GetMapping
-	public List<DespesasDto> lista(@RequestParam(required = false) String descricao) {
+	public Page<DespesasDto> lista(@RequestParam(required = false) String descricao, Pageable pageable) {
 		if (descricao == null) {
-			List<Despesas> despesas = repository.findAll();
+			Page<Despesas> despesas = repository.findAll(pageable);
 			return DespesasDto.converter(despesas);
 		} else {
-			List<Despesas> despesas = repository.findByDescricao(descricao);
+			Page<Despesas> despesas = repository.findByDescricao(descricao, pageable);
 			return DespesasDto.converter(despesas);
 		}
 
@@ -55,7 +56,8 @@ public class DespesasController {
 	}
 
 	@GetMapping("/{ano}/{mes}")
-	public ResponseEntity<?> buscarPorAnoMes(@PathVariable Integer ano, @PathVariable Integer mes) {
+	public ResponseEntity<Page<DespesasDto>> buscarPorAnoMes(@PathVariable Integer ano, @PathVariable Integer mes, 
+			Pageable pageable) {
 		LocalDate dataInicio;
 		try {
 			dataInicio = LocalDate.of(ano, mes, 1);
@@ -63,7 +65,7 @@ public class DespesasController {
 			return ResponseEntity.badRequest().build();
 		}		
 		LocalDate dataFinal = dataInicio.with(TemporalAdjusters.lastDayOfMonth());
-		List<Despesas> despesas = repository.findByDataBetween(dataInicio, dataFinal);
+		Page<Despesas> despesas = repository.findByDataBetween(dataInicio, dataFinal, pageable);
 		return ResponseEntity.ok(DespesasDto.converter(despesas));
 
 	}

@@ -2,8 +2,10 @@ package br.com.challenge.financeiro.controller.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.stream.Collectors;
+
+
+import org.springframework.data.domain.Page;
+
 import br.com.challenge.financeiro.model.Receitas;
 
 public class ReceitasDto {
@@ -36,8 +38,8 @@ public class ReceitasDto {
 	}
 
 
-	public static List<ReceitasDto> converter(List<Receitas> receitas) {
-		return receitas.stream().map(ReceitasDto::new).collect(Collectors.toList());
+	public static Page<ReceitasDto> converter(Page<Receitas> receitas) {
+		return receitas.map(ReceitasDto::new);
 	}
 	
 	

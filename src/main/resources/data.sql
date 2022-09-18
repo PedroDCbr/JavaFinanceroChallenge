@@ -1,3 +1,5 @@
+insert into USUARIO(email, senha) values('usuario@email.com', '$2a$10$N9bnr8/XJ/t6yfBbqD79VeeYzIwIoJjpAc1NWtoe921hRnQRVyP9q')
+
 insert into RECEITAS(descricao, valor, data) values('Salário', '2000.00', '2022-09-10');
 insert into RECEITAS(descricao, valor, data) values('Aplicação a', '152.03', '2022-09-13');
 insert into RECEITAS(descricao, valor, data) values('Horas Extras', '31.30', '2022-09-10');
