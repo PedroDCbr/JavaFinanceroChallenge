@@ -35,7 +35,7 @@ public class SecurityConfig {
 				.antMatchers(HttpMethod.POST, "/auth").permitAll()
 				.antMatchers(HttpMethod.GET, "/actuator").permitAll()
 				.antMatchers(HttpMethod.GET, "/actuator/**").permitAll()
-				.antMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/**/api-docs").permitAll()
+				.antMatchers("/v3/api-docs/**", "/swagger-ui/**", "/", "/**/api-docs").permitAll()
 				.antMatchers("**/favicon.ico", "/css/**", "/images/**", "/js/**", "/webjars/**").permitAll()
                 .anyRequest().authenticated().and()                
 				.csrf().disable()
